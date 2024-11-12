@@ -6,9 +6,7 @@ import { cn } from "@/utils"
 import { UserButton } from "@clerk/nextjs"
 import { Gem, Home, Key, LucideIcon, Menu, Settings, X } from "lucide-react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { PropsWithChildren, useState } from "react"
-import { Drawer } from "vaul"
 
 interface SidebarItem {
   href: string
@@ -44,7 +42,6 @@ const SIDEBAR_ITEMS: SidebarCategory[] = [
 ]
 
 const Sidebar = ({ onClose }: { onClose?: () => void }) => {
-  const router = useRouter()
   return (
     <div className="space-y-4 md:space-y-6 relative z-20 flex flex-col h-full">
       {/* logo */}
@@ -149,7 +146,7 @@ const Layout = ({ children }: PropsWithChildren) => {
             </button>
           </div>
 
-          <Sidebar />
+          <Sidebar onClose={() => setIsDrawerOpen(false)} />
         </Modal>
       </div>
     </div>
