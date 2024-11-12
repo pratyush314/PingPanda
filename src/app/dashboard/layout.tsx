@@ -6,6 +6,7 @@ import { cn } from "@/utils"
 import { UserButton } from "@clerk/nextjs"
 import { Gem, Home, Key, LucideIcon, Menu, Settings, X } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { PropsWithChildren, useState } from "react"
 import { Drawer } from "vaul"
 
@@ -43,11 +44,14 @@ const SIDEBAR_ITEMS: SidebarCategory[] = [
 ]
 
 const Sidebar = ({ onClose }: { onClose?: () => void }) => {
+  const router = useRouter()
   return (
     <div className="space-y-4 md:space-y-6 relative z-20 flex flex-col h-full">
       {/* logo */}
       <p className="hidden sm:block text-lg/7 font-semibold text-brand-900">
-        Ping<span className="text-brand-700">Panda</span>
+        <Link href="/">
+          Ping<span className="text-brand-700">Panda</span>
+        </Link>
       </p>
 
       {/* navigation items */}

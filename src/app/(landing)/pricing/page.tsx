@@ -3,7 +3,6 @@ import Heading from "@/components/Heading"
 import MaxWidthWrapper from "@/components/MaxWidthWrapper"
 import { Button } from "@/components/ui/button"
 import { client } from "@/lib/client"
-import { createCheckoutSession } from "@/lib/stripe"
 import { useUser } from "@clerk/nextjs"
 import { useMutation } from "@tanstack/react-query"
 import { CheckIcon } from "lucide-react"
@@ -32,9 +31,15 @@ const Page = () => {
       }
     },
   })
-  const handleGetAccess = () => {
+  const handleGetAccess = async () => {
     if (user) {
-      createCheckoutSession()
+      const res = await client.auth.getUserPlanStatus.$get()
+      const data = await res.json()
+      if (data.message === "PRO") {
+        router.push("/dashboard")
+      } else {
+        createCheckoutSession()
+      }
     } else {
       router.push("/sign-in?intent=upgrade")
     }

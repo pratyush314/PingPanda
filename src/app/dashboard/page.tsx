@@ -15,9 +15,8 @@ interface PageProps {
   }
 }
 
-const page = async ({ searchParams }: PageProps) => {
+const Page = async ({ searchParams }: PageProps) => {
   const auth = await currentUser()
-
   if (!auth) {
     redirect("/sign-in")
   }
@@ -34,24 +33,28 @@ const page = async ({ searchParams }: PageProps) => {
   const intent = searchParams.intent
 
   if (intent === "upgrade") {
-    const session = await createCheckoutSession({
-      userEmail: user.email,
-      userId: user.id,
-    })
+    if (user.plan === "FREE") {
+      const session = await createCheckoutSession({
+        userEmail: user.email,
+        userId: user.id,
+      })
 
-    if (session.url) {
-      redirect(session.url)
+      if (session.url) {
+        redirect(session.url)
+      }
+    } else {
+      redirect("/dashboard")
     }
   }
 
   const success = searchParams.success
   return (
     <>
-      {success && <PaymentSuccessModal />}
+      {success ? <PaymentSuccessModal /> : null}
       <DashboardPage
         cta={
           <CreateEventCategoryModal>
-            <Button className="w-full sm:w-fit">
+            <Button>
               <PlusIcon className="size-4 mr-2" /> Add Category
             </Button>
           </CreateEventCategoryModal>
@@ -64,4 +67,4 @@ const page = async ({ searchParams }: PageProps) => {
   )
 }
 
-export default page
+export default Page
